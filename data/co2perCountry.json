@@ -1,0 +1,4 @@
+[
+  { "country": "Switzerland", "code": "CH", "flag": "🇨🇭", "co2": 6.7 },
+  { "country": "USA", "code": "US", "flag": "🇺🇸", "co2": 20.2 }
+]
