@@ -82,7 +82,7 @@ const IndexPage = () => {
           <h2>Your personal life-time co2e budget</h2>
           <p>
             If w still have 420Gt of co2e left to emmit, then each person has a
-            personal lifetime budget of 60t co2e.
+            personal lifetime budget of 52,5t co2e.
           </p>
           <div>
             <b>52,5t</b> <i>co2e</i>
