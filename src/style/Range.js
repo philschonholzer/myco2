@@ -1,9 +1,9 @@
 import styled from '@emotion/styled'
 
 const Range = styled.input`
-  --width: 2em;
-  --height: 2em;
-  --thumb-size-ratio: 1.4;
+  --width: 4em;
+  --height: 4em;
+  --thumb-size-ratio: 1.6;
   --track-height: calc(var(--height) / var(--thumb-size-ratio));
   --track-to-thumb: calc(
     (var(--height) - var(--height) / var(--thumb-size-ratio)) / 2
@@ -11,6 +11,7 @@ const Range = styled.input`
   -webkit-appearance: none;
   margin: var(--track-to-thumb) 0;
   width: 100%;
+  height: var(--track-height);
   &:focus {
     outline: none;
   }
@@ -33,7 +34,7 @@ const Range = styled.input`
     border: 1px solid #000000;
     height: var(--height);
     width: var(--width);
-    border-radius: 3px;
+    border-radius: 50%;
     background: #fff;
     cursor: pointer;
     -webkit-appearance: none;
@@ -54,7 +55,7 @@ const Range = styled.input`
     border: 1px solid #000000;
     height: var(--height);
     width: var(--width);
-    border-radius: 3px;
+    border-radius: 50%;
     background: #ffffff;
     cursor: pointer;
   }
