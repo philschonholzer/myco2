@@ -10,9 +10,10 @@ import SEO from '../components/SEO'
 import Container from '../style/Container'
 import DefaultSection from '../style/Section'
 
-const Section = styled(DefaultSection)`
-  min-height: 100vh;
-`
+const Section = styled(DefaultSection)``
+
+const yearsToZero = co2e => (52.5 / co2e) * 2
+const dailyBudget = co2e => ((co2e / 365) * 1e3).toFixed(2)
 
 const query = graphql`
   {
@@ -32,6 +33,7 @@ const query = graphql`
 const IndexPage = () => {
   const { allCo2PerCountryJson } = useStaticQuery(query)
   const [country, setCoutry] = React.useState()
+  const [co2e, setCo2e] = React.useState(6)
 
   React.useEffect(() => {
     fetch('https://ipapi.co/json')
@@ -73,6 +75,7 @@ const IndexPage = () => {
           </p>
           {/* TODO: Earth from rotation for depending on the continent */}
           {/* TODO: Blue wedge over earth */}
+          {/* IDEA: Have red wedge fill according to scrollposition (ala apple.com) starting from 1850? showing the year number till today */}
           <img src={earth} alt="co2 budget left" />
         </Container>
       </Section>
@@ -97,13 +100,49 @@ const IndexPage = () => {
         <Container>
           <h2>Your co2e spending plan</h2>
           <p>How much of your co2e budget do you want to spend this year?</p>
-          <picture>co2e spending curve</picture>
+          <svg viewBox="-10 -5 120 80">
+            <text
+              x="-30"
+              y="-3"
+              transform="rotate(-90)"
+              style={{ fontSize: 7 }}
+            >
+              co2e
+            </text>
+            <text x="50" y="67" style={{ fontSize: 7 }}>
+              years
+            </text>
+            <path d="M0,0 L0,65 M-5,60 L100,60" stroke="#555" />
+            <path
+              d={`M0,${60 - co2e * 5} L${yearsToZero(co2e) * 5},60 L0,60 Z`}
+              stroke="red"
+              fill="#ee000022"
+            />
+            <path d="M5,30 L90,30" stroke="#aaa" />
+            <rect x="40" y="22" width="15" height="15" fill="white" />
+            {/* eslint-disable-next-line jsx-a11y/accessible-emoji */}
+            <text x="40" y="36">
+              🇨🇭
+            </text>
+          </svg>
           <label htmlFor="yearOneCo2">
             Amount of co2e this year
-            <input type="number" name="yearOneAmount" id="yearOneCo2" />
+            <input
+              css={css`
+                font-size: 4em;
+                width: 2em;
+              `}
+              type="number"
+              name="yearOneAmount"
+              id="yearOneCo2"
+              value={co2e}
+              onChange={e => setCo2e(e.target.value)}
+            />
           </label>
           <i>t co2e</i>
-          <em>You need to reach 0 co2e in {17.5} years</em>
+          <p>
+            You need to reach 0 co2e in {yearsToZero(co2e).toFixed(2)} years
+          </p>
         </Container>
       </Section>
       <hr />
@@ -111,8 +150,9 @@ const IndexPage = () => {
         <Container>
           <h2>Your personal co2e budget this year</h2>
           <p>
-            You have a {6}t co2e budget this year to spend. Each year you need
-            to reduce your co2e by {0.36}t.
+            You have a {co2e}t co2e budget this year to spend. Each year you
+            need to reduce your co2e by {(co2e / yearsToZero(co2e)).toFixed(2)}
+            t.
           </p>
           <picture>co2e budget this year with curve to 0.</picture>
         </Container>
@@ -122,16 +162,17 @@ const IndexPage = () => {
         <Container>
           <h2>Your daily co2e budget this year</h2>
           <p>
-            Based on your yearly budget you have a daily budget of {16.4}kg
-            co2e.
+            Based on your yearly budget you have a daily budget of{' '}
+            {dailyBudget(co2e)}
+            kg co2e.
           </p>
           <picture>
-            {16.4}kg co2e
+            {dailyBudget(co2e)}kg co2e
             <p>Show a little block of budget</p>
           </picture>
           <p>
             <small>
-              {6}t / 356 = {16.4}kg
+              {co2e}t / 356 = {dailyBudget(co2e)}kg
             </small>
           </p>
         </Container>
