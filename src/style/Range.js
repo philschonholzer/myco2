@@ -1,39 +1,47 @@
 import styled from '@emotion/styled'
 
 const Range = styled.input`
+  --width: 2em;
+  --height: 2em;
+  --thumb-size-ratio: 1.4;
+  --track-height: calc(var(--height) / var(--thumb-size-ratio));
+  --track-to-thumb: calc(
+    (var(--height) - var(--height) / var(--thumb-size-ratio)) / 2
+  );
   -webkit-appearance: none;
-  margin: 18px 0;
+  margin: var(--track-to-thumb) 0;
   width: 100%;
   &:focus {
     outline: none;
   }
   &::-webkit-slider-runnable-track {
     width: 100%;
-    height: 8.4px;
+    height: var(--track-height);
     cursor: pointer;
     animate: 0.2s;
     box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
     background: #3071a9;
     border-radius: 1.3px;
     border: 0.2px solid #010101;
+    &:focus {
+      background: #367ebd;
+    }
   }
   &::-webkit-slider-thumb {
+    position: relative;
     box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
     border: 1px solid #000000;
-    height: 36px;
-    width: 16px;
+    height: var(--height);
+    width: var(--width);
     border-radius: 3px;
-    background: #ffffff;
+    background: #fff;
     cursor: pointer;
     -webkit-appearance: none;
-    margin-top: -14px;
-  }
-  &:focus::-webkit-slider-runnable-track {
-    background: #367ebd;
+    margin-top: calc(var(--track-to-thumb) * -1);
   }
   &::-moz-range-track {
     width: 100%;
-    height: 8.4px;
+    height: var(--track-height);
     cursor: pointer;
     animate: 0.2s;
     box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
@@ -44,15 +52,15 @@ const Range = styled.input`
   &::-moz-range-thumb {
     box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
     border: 1px solid #000000;
-    height: 36px;
-    width: 16px;
+    height: var(--height);
+    width: var(--width);
     border-radius: 3px;
     background: #ffffff;
     cursor: pointer;
   }
   &::-ms-track {
     width: 100%;
-    height: 8.4px;
+    height: var(--track-height);
     cursor: pointer;
     animate: 0.2s;
     background: transparent;
@@ -75,8 +83,8 @@ const Range = styled.input`
   &::-ms-thumb {
     box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
     border: 1px solid #000000;
-    height: 36px;
-    width: 16px;
+    height: var(--height);
+    width: var(--width);
     border-radius: 3px;
     background: #ffffff;
     cursor: pointer;
