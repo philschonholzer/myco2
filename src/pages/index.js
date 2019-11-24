@@ -1,14 +1,16 @@
 import React from 'react'
 import { Link, useStaticQuery, graphql } from 'gatsby'
 import styled from '@emotion/styled'
-
 import { css } from '@emotion/core'
+import { addDays, format } from 'date-fns/fp'
+
 import earth from '../images/earth.svg'
 
 import Layout from '../components/Layout'
 import SEO from '../components/SEO'
 import Container from '../style/Container'
 import DefaultSection from '../style/Section'
+import Range from '../style/Range'
 
 const Section = styled(DefaultSection)``
 
@@ -127,21 +129,24 @@ const IndexPage = () => {
           </svg>
           <label htmlFor="yearOneCo2">
             Amount of co2e this year
-            <input
-              css={css`
-                font-size: 4em;
-                width: 2em;
-              `}
-              type="number"
+            <p>
+              <b>{co2e}t</b> co2e
+            </p>
+            <Range
+              type="range"
+              min="1"
+              max="40"
+              step="0.2"
               name="yearOneAmount"
               id="yearOneCo2"
               value={co2e}
               onChange={e => setCo2e(e.target.value)}
             />
           </label>
-          <i>t co2e</i>
           <p>
-            You need to reach 0 co2e in {yearsToZero(co2e).toFixed(2)} years
+            You need to reach 0 co2e at{' '}
+            {format('dd.MM.yyyy', addDays(yearsToZero(co2e) * 365, new Date()))}{' '}
+            in {yearsToZero(co2e).toFixed(2)} years
           </p>
         </Container>
       </Section>
