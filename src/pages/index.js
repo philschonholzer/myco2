@@ -14,8 +14,6 @@ import Range from '../style/Range'
 
 const Section = styled(DefaultSection)``
 
-const compose = (...fns) => x => fns.reduceRight((y, f) => f(y), x)
-
 const yearsToZero = co2e => (52.5 / co2e) * 2
 const dailyBudget = co2e => ((co2e / 365) * 1e3).toFixed(2)
 
@@ -122,7 +120,7 @@ const IndexPage = () => {
           </p>
           {/* TODO: Earth from rotation for depending on the continent */}
           {/* TODO: Blue wedge over earth */}
-          <svg viewBox="0 0 100 100" ref={ref}>
+          <svg viewBox="0 0 100 100" ref={ref} id="left">
             <circle cx="50" cy="50" r="40" fill="#6af3" stroke="#6af" />
             <path
               d={describeArc(50, 50, 40.5, 0, minmax(1, 277, percentage * 560))}
@@ -142,6 +140,7 @@ const IndexPage = () => {
             personal lifetime budget of 52,5t co2e.
           </p>
           <svg viewBox="0 0 100 100">
+            {/* <use href="#left" x="10" y="-30" width="20" /> */}
             <path d="M30,10L70,10L70,90L30,90Z" stroke="#6af" fill="#6af3" />
             <text y="40" style={{ fontSize: 7 }}>
               <tspan x="42" dy="1.2em">
@@ -162,7 +161,7 @@ const IndexPage = () => {
         <Container>
           <h2>Your co2e spending plan</h2>
           <p>How do you want to spend your co2e budget?</p>
-          <svg viewBox="-10 -5 120 80">
+          <svg viewBox="-10 -5 120 80" id="curve">
             <text
               x="-30"
               y="-3"
@@ -265,7 +264,7 @@ const IndexPage = () => {
             {dailyBudget(co2e)}
             kg co2e.
           </p>
-          <svg viewBox="0 0 100 90">
+          <svg viewBox="30 30 100 60">
             <path d="M48,80L52,80L52,84L48,84Z" stroke="#6af" fill="#6af3" />
             <text y="50" style={{ fontSize: 7 }}>
               <tspan x="35" dy="1.2em">
@@ -281,7 +280,7 @@ const IndexPage = () => {
           </svg>
           <p>
             <small>
-              {co2e}t / 356 = {dailyBudget(co2e)}kg
+              {co2e}t / 365 = {dailyBudget(co2e)}kg
             </small>
           </p>
         </Container>
