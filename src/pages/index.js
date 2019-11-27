@@ -161,7 +161,14 @@ const IndexPage = () => {
         <Container>
           <h2>Your co2e spending plan</h2>
           <p>How do you want to spend your co2e budget?</p>
-          <svg viewBox="-10 -5 120 80" id="curve">
+          <svg
+            viewBox={`-10 ${minmax(-500, 10, 50 - co2e * 5)} ${minmax(
+              120,
+              500,
+              yearsToZero(co2e) * 5 + 20
+            )} ${minmax(60, 200, co2e * 5 + 20)}`}
+            id="curve"
+          >
             <text
               x="-30"
               y="-3"
@@ -173,7 +180,7 @@ const IndexPage = () => {
             <text x="50" y="67" style={{ fontSize: 7 }}>
               years
             </text>
-            <path d="M0,0 L0,65 M-5,60 L100,60" stroke="#555" />
+            <path d="M0,-500 L0,65 M-5,60 L500,60" stroke="#555" />
             <path
               d={`M0,${60 - co2e * 5} L${yearsToZero(co2e) * 5},60 L0,60 Z`}
               stroke="#6af"
@@ -202,7 +209,7 @@ const IndexPage = () => {
             <Range
               type="range"
               min="1"
-              max="40"
+              max="30"
               step="0.2"
               name="yearOneAmount"
               id="yearOneCo2"
@@ -226,7 +233,13 @@ const IndexPage = () => {
             need to reduce your co2e by {(co2e / yearsToZero(co2e)).toFixed(2)}
             t.
           </p>
-          <svg viewBox="-10 -5 120 80">
+          <svg
+            viewBox={`-10 ${minmax(-500, 10, 50 - co2e * 5)} 120 ${minmax(
+              60,
+              200,
+              co2e * 5 + 20
+            )}`}
+          >
             <text
               x="-30"
               y="-3"
@@ -238,7 +251,7 @@ const IndexPage = () => {
             <text x="50" y="67" style={{ fontSize: 7 }}>
               years
             </text>
-            <path d="M0,0 L0,65 M-5,60 L100,60" stroke="#555" />
+            <path d="M0,-500 L0,65 M-5,60 L120,60" stroke="#555" />
             <path
               d={`M0,${60 - co2e * 5} L5,${60 - co2e * 5} L5,60 L0,60 Z`}
               stroke="#6af"
