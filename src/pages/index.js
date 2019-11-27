@@ -3,7 +3,7 @@ import { Link, useStaticQuery, graphql } from 'gatsby'
 import styled from '@emotion/styled'
 import { css } from '@emotion/core'
 import { addDays, format } from 'date-fns/fp'
-
+import { useScrollPercentage } from 'react-scroll-percentage'
 import earth from '../images/earth.svg'
 
 import Layout from '../components/Layout'
@@ -14,8 +14,50 @@ import Range from '../style/Range'
 
 const Section = styled(DefaultSection)``
 
+const compose = (...fns) => x => fns.reduceRight((y, f) => f(y), x)
+
 const yearsToZero = co2e => (52.5 / co2e) * 2
 const dailyBudget = co2e => ((co2e / 365) * 1e3).toFixed(2)
+
+const polarToCartesian = (centerX, centerY, radius, angleInDegrees) => {
+  const angleInRadians = ((angleInDegrees - 90) * Math.PI) / 180.0
+
+  return {
+    x: centerX + radius * Math.cos(angleInRadians),
+    y: centerY + radius * Math.sin(angleInRadians),
+  }
+}
+
+const describeArc = (x, y, radius, startAngle, endAngle) => {
+  const start = polarToCartesian(x, y, radius, endAngle)
+  const end = polarToCartesian(x, y, radius, startAngle)
+
+  const arcSweep = endAngle - startAngle <= 180 ? '0' : '1'
+
+  const d = [
+    'M',
+    start.x,
+    start.y,
+    'A',
+    radius,
+    radius,
+    0,
+    arcSweep,
+    0,
+    end.x,
+    end.y,
+    'L',
+    x,
+    y,
+    'L',
+    start.x,
+    start.y,
+  ].join(' ')
+
+  return d
+}
+
+const minmax = (min, max, value) => Math.min(Math.max(value, min), max)
 
 const query = graphql`
   {
@@ -36,7 +78,10 @@ const IndexPage = () => {
   const { allCo2PerCountryJson } = useStaticQuery(query)
   const [country, setCoutry] = React.useState()
   const [co2e, setCo2e] = React.useState(6)
-
+  const [ref, percentage] = useScrollPercentage({
+    /* Optional options */
+    threshold: 0.5,
+  })
   React.useEffect(() => {
     fetch('https://ipapi.co/json')
       .then(response => response.json())
@@ -77,8 +122,15 @@ const IndexPage = () => {
           </p>
           {/* TODO: Earth from rotation for depending on the continent */}
           {/* TODO: Blue wedge over earth */}
-          {/* IDEA: Have red wedge fill according to scrollposition (ala apple.com) starting from 1850? showing the year number till today */}
-          <img src={earth} alt="co2 budget left" />
+          <svg viewBox="0 0 100 100" ref={ref}>
+            <circle cx="50" cy="50" r="40" fill="#6af3" stroke="#6af" />
+            <path
+              d={describeArc(50, 50, 40.5, 0, minmax(1, 277, percentage * 560))}
+              fill="#f33"
+            />
+            <circle cx="50" cy="50" r="30" fill="#fff" />
+            <image x="20" y="20" width="60" height="60" xlinkHref={earth} />
+          </svg>
         </Container>
       </Section>
       <hr />
@@ -89,9 +141,17 @@ const IndexPage = () => {
             If w still have 420Gt of co2e left to emmit, then each person has a
             personal lifetime budget of 52,5t co2e.
           </p>
-          <div>
-            <b>52,5t</b> <i>co2e</i>
-          </div>
+          <svg viewBox="0 0 100 100">
+            <path d="M30,10L70,10L70,90L30,90Z" stroke="#6af" fill="#6af3" />
+            <text y="40" style={{ fontSize: 7 }}>
+              <tspan x="42" dy="1.2em">
+                52,5t
+              </tspan>
+              <tspan x="44" dy="1.3em" style={{ fontSize: 4.5 }}>
+                co2e
+              </tspan>
+            </text>
+          </svg>
           <p>
             <small>420Gt / 8B people = 52,5t</small>
           </p>
@@ -117,9 +177,17 @@ const IndexPage = () => {
             <path d="M0,0 L0,65 M-5,60 L100,60" stroke="#555" />
             <path
               d={`M0,${60 - co2e * 5} L${yearsToZero(co2e) * 5},60 L0,60 Z`}
-              stroke="red"
-              fill="#ee000022"
+              stroke="#6af"
+              fill="#6af3"
             />
+            <text y="40" style={{ fontSize: 7, fill: '#6af' }}>
+              <tspan x="5" dy="1.2em">
+                52,5t
+              </tspan>
+              <tspan x="5" dy="1.3em" style={{ fontSize: 4.5 }}>
+                co2e
+              </tspan>
+            </text>
             <path d="M5,30 L90,30" stroke="#aaa" />
             <rect x="40" y="22" width="15" height="15" fill="white" />
             {/* eslint-disable-next-line jsx-a11y/accessible-emoji */}
@@ -127,7 +195,13 @@ const IndexPage = () => {
               🇨🇭
             </text>
           </svg>
-          <label htmlFor="yearOneCo2">
+          <label
+            htmlFor="yearOneCo2"
+            css={css`
+              position: sticky;
+              top: 20em;
+            `}
+          >
             Amount of co2e this year
             <p>
               <b>{co2e}t</b> co2e
@@ -159,7 +233,33 @@ const IndexPage = () => {
             need to reduce your co2e by {(co2e / yearsToZero(co2e)).toFixed(2)}
             t.
           </p>
-          <picture>co2e budget this year with curve to 0.</picture>
+          <svg viewBox="-10 -5 120 80">
+            <text
+              x="-30"
+              y="-3"
+              transform="rotate(-90)"
+              style={{ fontSize: 7 }}
+            >
+              co2e
+            </text>
+            <text x="50" y="67" style={{ fontSize: 7 }}>
+              years
+            </text>
+            <path d="M0,0 L0,65 M-5,60 L100,60" stroke="#555" />
+            <path
+              d={`M0,${60 - co2e * 5} L5,${60 - co2e * 5} L5,60 L0,60 Z`}
+              stroke="#6af"
+              fill="#6af3"
+            />
+            <text y="40" style={{ fontSize: 7, fill: '#6af' }}>
+              <tspan x="10" dy="1.2em">
+                {co2e}t
+              </tspan>
+              <tspan x="10" dy="1.3em" style={{ fontSize: 4.5 }}>
+                co2e
+              </tspan>
+            </text>
+          </svg>
         </Container>
       </Section>
       <hr />
@@ -171,10 +271,20 @@ const IndexPage = () => {
             {dailyBudget(co2e)}
             kg co2e.
           </p>
-          <picture>
-            {dailyBudget(co2e)}kg co2e
-            <p>Show a little block of budget</p>
-          </picture>
+          <svg viewBox="0 0 100 90">
+            <path d="M48,80L52,80L52,84L48,84Z" stroke="#6af" fill="#6af3" />
+            <text y="50" style={{ fontSize: 7 }}>
+              <tspan x="35" dy="1.2em">
+                Daily budget
+              </tspan>
+              <tspan x="40" dy="1.2em">
+                {dailyBudget(co2e)}kg
+              </tspan>
+              <tspan x="45" dy="1.3em" style={{ fontSize: 4.5 }}>
+                co2e
+              </tspan>
+            </text>
+          </svg>
           <p>
             <small>
               {co2e}t / 356 = {dailyBudget(co2e)}kg
