@@ -138,7 +138,7 @@ const IndexPage = () => {
         <Container>
           <h2>Your personal life-time co2e budget</h2>
           <p>
-            If w still have 420Gt of co2e left to emmit, then each person has a
+            If we still have 420Gt of co2e left to emmit, then each person has a
             personal lifetime budget of 52,5t co2e.
           </p>
           <svg viewBox="0 0 100 100">
@@ -161,7 +161,7 @@ const IndexPage = () => {
       <Section>
         <Container>
           <h2>Your co2e spending plan</h2>
-          <p>How much of your co2e budget do you want to spend this year?</p>
+          <p>How do you want to spend your co2e budget?</p>
           <svg viewBox="-10 -5 120 80">
             <text
               x="-30"
@@ -195,13 +195,7 @@ const IndexPage = () => {
               🇨🇭
             </text>
           </svg>
-          <label
-            htmlFor="yearOneCo2"
-            css={css`
-              position: sticky;
-              top: 20em;
-            `}
-          >
+          <label htmlFor="yearOneCo2">
             Amount of co2e this year
             <p>
               <b>{co2e}t</b> co2e
