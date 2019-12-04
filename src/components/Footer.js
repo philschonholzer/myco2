@@ -4,6 +4,7 @@ import Container from '../style/Container'
 
 const Wrapper = styled.footer`
   grid-area: Footer;
+  padding-bottom: 10em;
 `
 
 const Footer = () => (
