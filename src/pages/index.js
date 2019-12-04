@@ -119,7 +119,6 @@ const IndexPage = () => {
             keep global temperatur rise below 1,5 C°.
           </p>
           {/* TODO: Earth from rotation for depending on the continent */}
-          {/* TODO: Blue wedge over earth */}
           <svg viewBox="0 0 100 100" ref={ref} id="left">
             <circle cx="50" cy="50" r="40" fill="#6af3" stroke="#6af" />
             <path
@@ -212,22 +211,9 @@ const IndexPage = () => {
               </text>
             </svg>
           </div>
-          <label htmlFor="yearOneCo2">
-            Amount of co2e this year
-            <p>
-              <b>{co2e}t</b> co2e
-            </p>
-            <Range
-              type="range"
-              min="1"
-              max="30"
-              step="0.2"
-              name="yearOneAmount"
-              id="yearOneCo2"
-              value={co2e}
-              onChange={e => setCo2e(e.target.value)}
-            />
-          </label>
+          <p>
+            <b>{co2e}t</b> co2e
+          </p>
           <p>
             You need to reach 0 co2e at{' '}
             {format('dd.MM.yyyy', addDays(yearsToZero(co2e) * 365, new Date()))}{' '}
@@ -244,39 +230,51 @@ const IndexPage = () => {
             need to reduce your co2e by {(co2e / yearsToZero(co2e)).toFixed(2)}
             t.
           </p>
-          <svg
-            viewBox={`-10 ${minmax(-500, 10, 50 - co2e * 5)} 120 ${minmax(
-              60,
-              200,
-              co2e * 5 + 20
-            )}`}
+          <div 
+            css={css`
+              position: relative;
+              height: 50vw;
+            `}
           >
-            <text
-              x="-30"
-              y="-3"
-              transform="rotate(-90)"
-              style={{ fontSize: 7 }}
+            <svg
+              css={css`
+                position: absolute;
+                bottom: 0;
+              `}
+              viewBox={`-10 ${minmax(-500, 10, 50 - co2e * 5)} 120 ${minmax(
+                60,
+                200,
+                co2e * 5 + 20
+              )}`}
             >
-              co2e
-            </text>
-            <text x="50" y="67" style={{ fontSize: 7 }}>
-              years
-            </text>
-            <path d="M0,-500 L0,65 M-5,60 L120,60" stroke="#555" />
-            <path
-              d={`M0,${60 - co2e * 5} L5,${60 - co2e * 5} L5,60 L0,60 Z`}
-              stroke="#6af"
-              fill="#6af3"
-            />
-            <text y="40" style={{ fontSize: 7, fill: '#6af' }}>
-              <tspan x="10" dy="1.2em">
-                {co2e}t
-              </tspan>
-              <tspan x="10" dy="1.3em" style={{ fontSize: 4.5 }}>
+              <text
+                x="-30"
+                y="-3"
+                transform="rotate(-90)"
+                style={{ fontSize: 7 }}
+              >
                 co2e
-              </tspan>
-            </text>
-          </svg>
+              </text>
+              <text x="50" y="67" style={{ fontSize: 7 }}>
+                years
+              </text>
+              <path d="M0,-500 L0,65 M-5,60 L120,60" stroke="#555" />
+              <path
+                d={`M0,${60 - co2e * 5} L5,${60 - co2e * 5} L5,60 L0,60 Z`}
+                stroke="#6af"
+                fill="#6af3"
+              />
+              <text y="40" style={{ fontSize: 7, fill: '#6af' }}>
+                <tspan x="10" dy="1.2em">
+                  {co2e}t
+                </tspan>
+                <tspan x="10" dy="1.3em" style={{ fontSize: 4.5 }}>
+                  co2e
+                </tspan>
+              </text>
+            </svg>
+          
+          </div>
         </Container>
       </Section>
       <hr />
@@ -307,6 +305,35 @@ const IndexPage = () => {
               {co2e}t / 365 = {dailyBudget(co2e)}kg
             </small>
           </p>
+        </Container>
+      </Section>
+      <Section
+        css={css`
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            padding: 0 0 2em;
+            background: #eee;
+          `}
+      >
+        <Container>
+          <label htmlFor="yearOneCo2" css={css`display: grid; grid: "lable amount" "range range" / 1fr auto ;`}>
+            <p>
+              Amount of co2e this year
+            </p>
+            <p>co2e <b>{co2e}</b>t</p>
+            <Range
+              css={css`grid-area: range;`}
+              type="range"
+              min="1"
+              max="30"
+              step="0.2"
+              name="yearOneAmount"
+              id="yearOneCo2"
+              value={co2e}
+              onChange={e => setCo2e(e.target.value)}
+            />
+          </label>
         </Container>
       </Section>
     </Layout>
