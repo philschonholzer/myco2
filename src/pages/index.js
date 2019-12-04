@@ -76,10 +76,11 @@ const IndexPage = () => {
   const { allCo2PerCountryJson } = useStaticQuery(query)
   const [country, setCoutry] = React.useState()
   const [co2e, setCo2e] = React.useState(6)
-  const [ref, percentage] = useScrollPercentage({
+  const [refPercentage, percentage] = useScrollPercentage({
     /* Optional options */
     threshold: 0.5,
   })
+  const [refPlan, planVisible] = useScrollPercentage()
   React.useEffect(() => {
     fetch('https://ipapi.co/json')
       .then(response => response.json())
@@ -119,7 +120,7 @@ const IndexPage = () => {
             keep global temperatur rise below 1,5 C°.
           </p>
           {/* TODO: Earth from rotation for depending on the continent */}
-          <svg viewBox="0 0 100 100" ref={ref} id="left">
+          <svg viewBox="0 0 100 100" ref={refPercentage} id="left">
             <circle cx="50" cy="50" r="40" fill="#6af3" stroke="#6af" />
             <path
               d={describeArc(50, 50, 40.5, 0, minmax(1, 277, percentage * 560))}
@@ -167,6 +168,7 @@ const IndexPage = () => {
             `}
           >
             <svg
+              ref={refPlan}
               css={css`
                 position: absolute;
                 bottom: 0;
@@ -211,9 +213,6 @@ const IndexPage = () => {
               </text>
             </svg>
           </div>
-          <p>
-            <b>{co2e}t</b> co2e
-          </p>
           <p>
             You need to reach 0 co2e at{' '}
             {format('dd.MM.yyyy', addDays(yearsToZero(co2e) * 365, new Date()))}{' '}
@@ -309,11 +308,14 @@ const IndexPage = () => {
       </Section>
       <Section
         css={css`
+            ${planVisible < 0.3 && 'display: none;'}
             position: fixed;
             bottom: 0;
             width: 100%;
             padding: 0 0 2em;
             background: #eee;
+            opacity: ${planVisible > 0.4 ? 1 : 0};
+            transition: opacity 200ms;
           `}
       >
         <Container>
