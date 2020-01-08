@@ -1,0 +1,17 @@
+[
+  { "name": "Heat my home" },
+  { "name": "Cool my home" },
+  { "name": "Warm showers" },
+  { "name": "Drive in a car" },
+  { "name": "Cook" },
+  { "name": "Eat food from a restaurant" },
+  { "name": "Drink coffee" },
+  { "name": "Drink alcohol" },
+  { "name": "Buy clothe" },
+  { "name": "Buy gadgets" },
+  { "name": "Stay overnight at hotels" },
+  { "name": "Fly with a plane" },
+  { "name": "Go on a cruse" },
+  { "name": "Buy a new car" },
+  { "name": "Build a house" }
+]
