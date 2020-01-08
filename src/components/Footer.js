@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import Container from '../style/Container'
+import { Container } from '../style'
 
 const Wrapper = styled.footer`
   grid-area: Footer;

@@ -1,6 +1,6 @@
 import React from 'react'
-import Container from '../../style/Container'
-import Section from '../../style/Section'
+
+import { Section, Container } from '../../style'
 
 const PersonalBudget = () => {
   return (

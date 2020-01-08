@@ -1,8 +1,7 @@
 import React from 'react'
 import { css } from '@emotion/core'
 
-import Section from '../../style/Section'
-import Container from '../../style/Container'
+import { Section, Container } from '../../style'
 import { yearsToZero, minmax } from './lib'
 
 const FirstBudget = ({ co2e }) => {

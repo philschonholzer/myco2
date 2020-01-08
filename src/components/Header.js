@@ -1,7 +1,7 @@
 import { Link } from 'gatsby'
 import React from 'react'
 import styled from '@emotion/styled'
-import Container from '../style/Container'
+import { Container } from '../style'
 
 const Wrapper = styled.header`
   grid-area: Header;

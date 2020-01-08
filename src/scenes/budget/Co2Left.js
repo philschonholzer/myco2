@@ -2,8 +2,7 @@ import React from 'react'
 import { useScrollPercentage } from 'react-scroll-percentage'
 
 import earth from '../../images/earth.svg'
-import Section from '../../style/Section'
-import Container from '../../style/Container'
+import { Section, Container } from '../../style'
 import { minmax } from './lib'
 
 const polarToCartesian = (centerX, centerY, radius, angleInDegrees) => {

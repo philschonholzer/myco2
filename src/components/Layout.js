@@ -9,9 +9,9 @@ import React from 'react'
 import { useStaticQuery, graphql } from 'gatsby'
 import styled from '@emotion/styled'
 
-import GlobalStyle from '../style/GlobalStyle'
 import Header from './Header'
 import Footer from './Footer'
+import { GlobalStyle } from '../style'
 
 const Main = styled.main`
   grid-area: Main;

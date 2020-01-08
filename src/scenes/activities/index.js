@@ -2,8 +2,7 @@ import React from 'react'
 import { graphql, useStaticQuery, Link } from 'gatsby'
 import styled from '@emotion/styled'
 import { css } from '@emotion/core'
-import Section from '../../style/Section'
-import Container from '../../style/Container'
+import { Section, Container } from '../../style'
 
 const mapEdgesToNodes = ({ edges }) => edges.map(({ node }) => node)
 

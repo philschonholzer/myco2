@@ -1,6 +1,6 @@
 import React from 'react'
-import Section from '../../style/Section'
-import Container from '../../style/Container'
+
+import { Section, Container } from '../../style'
 
 const dailyBudget = co2e => ((co2e / 365) * 1e3).toFixed(2)
 

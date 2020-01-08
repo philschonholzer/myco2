@@ -3,9 +3,7 @@ import { css } from '@emotion/core'
 import { addDays, format } from 'date-fns/fp'
 import { useScrollPercentage } from 'react-scroll-percentage'
 
-import Container from '../../style/Container'
-import Range from '../../style/Range'
-import Section from '../../style/Section'
+import { Section, Container, Range } from '../../style'
 
 import { minmax, yearsToZero } from './lib'
 
