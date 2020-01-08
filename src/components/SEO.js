@@ -24,7 +24,7 @@ function SEO({ lang = `en`, meta = [], description = ``, title }) {
     `
   )
 
-  const metaDescription = description || site.siteMetadata.description
+  const metaDescription = description ?? site.siteMetadata.description
 
   return (
     <Helmet

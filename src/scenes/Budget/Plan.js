@@ -79,7 +79,7 @@ const Plan = ({ co2e, setCo2e }) => {
       </Section>
       <Section
         css={css`
-          ${planVisible < 0.3 && 'display: none;'}
+          ${planVisible < 0.3 ?? 'display: none;'}
           position: fixed;
           bottom: 0;
           width: 100%;
