@@ -22,8 +22,8 @@ const Label = styled.label`
 
 const Activity = ({ name }) => {
   return (
-    <Label htmlFor={name}>
-      {name}
+    <Label htmlFor={name} key={name}>
+      <Link to={`activities/details/${name}`}>{name}</Link>
       <input type="checkbox" id={name} name={name} />
     </Label>
   )
@@ -58,7 +58,7 @@ const Activities = () => {
             {activites && activites.map(Activity)}
           </div>
 
-          <Link to="budget">Next</Link>
+          <Link to="activities/details">Next</Link>
         </Container>
       </Section>
     </>
