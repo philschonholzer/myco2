@@ -1,0 +1,121 @@
+﻿Entity,Code,tCO2,Flags
+Albania,ALB,0.957251496,🇦🇱
+Argentina,ARG,4.705213441,🇦🇷 
+Armenia,ARM,0.925446934,🇦🇲 
+Australia,AUS,15.59223862,🇦🇺
+Austria,AUT,10.53101461,🇦🇹
+Azerbaijan,AZE,4.30164407,🇦🇿
+Bahrain,BHR,14.05303223,🇧🇭
+Bangladesh,BGD,0.672806072,🇧🇩
+Belarus,BLR,7.207700135,🇧🇾
+Belgium,BEL,15.60585459,🇧🇪
+Benin,BEN,0.442239902,🇧🇯
+Bolivia,BOL,0.471527888,🇧🇴
+Botswana,BWA,6.000052438,🇧🇼
+Brazil,BRA,2.519694414,🇧🇷 
+Brunei,BRN,22.62858817,🇧🇳 
+Bulgaria,BGR,5.400242221,🇧🇬 
+Burkina Faso,BFA,0.063419583,🇧🇫 
+Cambodia,KHM,0.954378561,🇰🇭 
+Cameroon,CMR,0.190328812,🇨🇲 
+Canada,CAN,15.81779817,🇨🇦 
+Chile,CHL,5.154943223,🇨🇱 
+China,CHN,6.270358852,🇨🇳 
+Colombia,COL,2.057438718,🇨🇴 
+Costa Rica,CRI,1.339260458,🇨🇷 
+Cote d'Ivoire,CIV,0.249136486,🇨🇮 
+Croatia,HRV,4.458607517,🇭🇷 
+Cyprus,CYP,6.606683901,🇨🇾 
+Czech Republic,CZE,10.0119863,🇨🇿 
+Denmark,DNK,9.21899553,🇩🇰 
+Dominican Republic,DOM,0.860233148,🇩🇴 
+Ecuador,ECU,2.856610726,🇪🇨 
+Egypt,EGY,2.367252267,🇪🇬 
+El Salvador,SLV,0.56912596,🇸🇻 
+Estonia,EST,13.28754794,🇪🇪 
+Ethiopia,ETH,0.095156737,🇪🇹 
+Finland,FIN,12.64584695,🇫🇮 
+France,FRA,6.93237569,🇫🇷 
+Georgia,GEO,1.58764153,🇬🇪 
+Germany,DEU,10.83757056,🇩🇪 
+Ghana,GHA,0.394076052,🇬🇭 
+Greece,GRC,5.664457413,🇬🇷 
+Guatemala,GTM,0.48887943,🇬🇹 
+Guinea,GIN,0.02009951,🇬🇳 
+Honduras,HND,0.495960382,🇭🇳 
+Hong Kong,HKG,16.52992485,🇭🇰 
+Hungary,HUN,6.560118487,🇭🇺 
+India,IND,1.67460257,🇮🇳 
+Indonesia,IDN,1.93398655,🇮🇩 
+Iran,IRN,7.139585613,🇮🇷 
+Ireland,IRL,9.136364867,🇮🇪 
+Israel,ISR,10.14195488,🇮🇱 
+Italy,ITA,7.681812456,🇮🇹 
+Jamaica,JAM,1.104697616,🇯🇲 
+Japan,JPN,11.05510996,🇯🇵 
+Jordan,JOR,3.402363332,🇯🇴 
+Kazakhstan,KAZ,12.91969367,🇰🇿 
+Kenya,KEN,0.298430858,🇰🇪 
+Kuwait,KWT,22.71971858,🇰🇼 
+Kyrgyzstan,KGZ,1.592446708,🇰🇬 
+Laos,LAO,0.981402126,🇱🇦 
+Latvia,LVA,6.468503905,🇱🇻 
+Lithuania,LTU,7.880136811,🇱🇹 
+Luxembourg,LUX,41.19677393,🇱🇺 
+Madagascar,MDG,0.086494551,🇲🇬 
+Malawi,MWI,0.110937826,🇲🇼 
+Malaysia,MYS,8.268860864,🇲🇾 
+Malta,MLT,11.09453561,🇲🇹 
+Mauritius,MUS,2.181225894,🇲🇺 
+Mexico,MEX,4.127226777,🇲🇽 
+Mongolia,MNG,8.690730786,🇲🇳 
+Morocco,MAR,1.829051405,🇲🇦 
+Mozambique,MOZ,0.369919523,🇲🇿 
+Namibia,NAM,2.613583104,🇳🇦 
+Nepal,NPL,0.53486649,🇳🇵 
+Netherlands,NLD,8.963579091,🇳🇱 
+New Zealand,NZL,8.42389826,🇳🇿 
+Nicaragua,NIC,0.367997479,🇳🇮 
+Nigeria,NGA,0.292729923,🇳🇬 
+Norway,NOR,9.280167599,🇳🇴 
+Oman,OMN,15.44059545,🇴🇲 
+Pakistan,PAK,1.055659739,🇵🇰 
+Panama,PAN,4.723000982,🇵🇦 
+Paraguay,PRY,0.783317433,🇵🇾 
+Peru,PER,2.314864848,🇵🇪 
+Philippines,PHL,1.384349929,🇵🇭 
+Poland,POL,7.806977505,🇵🇱 
+Portugal,PRT,5.283946,🇵🇹 
+Qatar,QAT,33.17476119,🇶🇦 
+Romania,ROU,3.745056081,🇷🇴 
+Russia,RUS,9.590429254,🇷🇺 
+Rwanda,RWA,0.00584149,🇷🇼 
+Saudi Arabia,SAU,19.28655969,🇸🇦 
+Senegal,SEN,0.327960718,🇸🇳 
+Singapore,SGP,21.86527327,🇸🇬 
+Slovakia,SVK,8.58806352,🇸🇰 
+Slovenia,SVN,8.018662452,🇸🇮 
+South Africa,ZAF,6.003775278,🇿🇦 
+South Korea,KOR,12.49736687,🇰🇷
+Spain,ESP,6.207893246,🇪🇸 
+Sri Lanka,LKA,1.589635345,🇱🇰 
+Sweden,SWE,7.144469858,🇸🇪 
+Switzerland,CHE,14.25069143,🇨🇭 
+Taiwan,TWN,11.34438138,🇹🇼 
+Tanzania,TZA,0.195513221,🇹🇿 
+Thailand,THA,4.505790425,🇹🇭 
+Togo,TGO,0.739410394,🇹🇬 
+Trinidad and Tobago,TTO,13.0950151,🇹🇹 
+Tunisia,TUN,1.019548115,🇹🇳 
+Turkey,TUR,5.685632822,🇹🇷 
+Uganda,UGA,0.091503379,🇺🇬 
+Ukraine,UKR,5.388061692,🇺🇦 
+United Arab Emirates,ARE,27.05307191,🇦🇪 
+United Kingdom,GBR,8.45887827,🇬🇧 
+United States,USA,17.74638031,🇺🇸 
+Uruguay,URY,2.044374197,🇺🇾 
+Venezuela,VEN,4.697145249,🇻🇪 
+Vietnam,VNM,2.225015183,🇻🇳 
+World,OWID_WRL,4.779608024,🌍
+Zambia,ZMB,0.393677624,🇿🇲 
+Zimbabwe,ZWE,0.289287324,🇿🇼 

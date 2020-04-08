@@ -14,30 +14,35 @@ const Section = styled(DefaultSection)``
 
 const query = graphql`
   {
-    allCo2PerCountryJson {
-      edges {
-        node {
-          co2
-          code
-          country
-          flag
-        }
+    allCo2ConsumptionCsv {
+      nodes {
+        Code
+        Entity
+        tCO2
+        Flags
       }
     }
   }
 `
 
 const Budget = () => {
-  const { allCo2PerCountryJson } = useStaticQuery(query)
+  const {
+    allCo2ConsumptionCsv: { nodes: allCountryData },
+  } = useStaticQuery(query)
   const [country, setCoutry] = React.useState()
   const [co2e, setCo2e] = React.useState(6)
 
   React.useEffect(() => {
     fetch('https://ipapi.co/json')
       .then(response => response.json())
-      .then(({ country: cntry }) => setCoutry(cntry))
+      .then(({ country_code_iso3: cntry }) => setCoutry(cntry))
       .catch(err => err)
   }, [])
+
+  const currentCountry = allCountryData.find(({ Code }) => Code === country)
+
+  const world = allCountryData.find(({ Code }) => Code === 'OWID_WRL')
+
   return (
     <>
       <Section>
@@ -65,7 +70,14 @@ const Budget = () => {
       <hr />
       <PersonalBudget />
       <hr />
-      <Plan co2e={co2e} setCo2e={setCo2e} />
+      {currentCountry && (
+        <Plan
+          co2e={co2e}
+          setCo2e={setCo2e}
+          countryData={currentCountry}
+          worldData={world}
+        />
+      )}
       <hr />
       <FirstBudget co2e={co2e} />
       <hr />
