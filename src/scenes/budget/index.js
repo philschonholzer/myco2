@@ -10,6 +10,7 @@ import Plan from './Plan'
 import FirstBudget from './FirstBudget'
 import DailyBudget from './DailyBudget'
 import BarGraph from './BarGraph'
+import YearlyBudget from './YearlyBudget'
 
 const Section = styled(DefaultSection)``
 
@@ -66,6 +67,16 @@ const Budget = () => {
           </div>
         </Container>
       </Section>
+      <hr />
+      <Container>
+        <div
+          css={css`
+            height: 50vh;
+          `}
+        >
+          <YearlyBudget />
+        </div>
+      </Container>
       <hr />
       <BarGraph />
       <hr />
