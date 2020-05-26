@@ -11,13 +11,13 @@ const Details = ({ activity }) => (
   <Container>
     <h2>Detail</h2>
     <p>More detail... for {activity}</p>
-    <Link to="activities/profile">Profile</Link>
+    <Link to="profile">Profile</Link>
   </Container>
 )
 const Profile = () => (
   <Container>
     <h2>Profile</h2>
-    <Link to="activities/details">Details</Link>
+    <Link to="details">Details</Link>
   </Container>
 )
 
@@ -25,11 +25,11 @@ const ActivitiesPage = () => {
   return (
     <Layout>
       <SEO title="Activities" />
-      <Router>
+      <Router basepath="/activities">
         <Activities default />
-        <Profile path="/activities/profile" />
-        <Details path="/activities/details" />
-        <Details path="/activities/details/:activity" />
+        <Profile path="/profile" />
+        <Details path="/details" />
+        <Details path="/details/:activity" />
       </Router>
     </Layout>
   )
