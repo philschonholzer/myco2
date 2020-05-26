@@ -13,7 +13,7 @@ const IndexPage = () => {
       <Section>
         <Container>
           <h2>Track your co2</h2>
-          <Link to="activities">Start</Link>
+          <Link to="/activities">Start</Link>
         </Container>
       </Section>
     </Layout>
