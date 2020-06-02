@@ -15,6 +15,7 @@
     "@vx/responsive": "0.0.196",
     "@vx/scale": "0.0.196",
     "@vx/shape": "0.0.196",
+    "@vx/text": "0.0.196",
     "date-fns": "^2.8.1",
     "emotion-normalize": "^10.1.0",
     "gatsby": "^2.18.18",
