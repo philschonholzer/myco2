@@ -1,11 +1,19 @@
 import React from 'react'
 import { css } from '@emotion/core'
 
-import { addDays, format } from 'date-fns/fp'
+import { addDays, format, differenceInDays, addYears } from 'date-fns/fp'
 import { useScrollPercentage } from 'react-scroll-percentage'
 
+import {
+  Annotation,
+  ConnectorElbow,
+  ConnectorEndDot,
+  Note,
+} from 'react-annotation'
+
 import { AxisLeft, AxisBottom } from '@vx/axis'
-import { withParentSize } from '@vx/responsive'
+import ParentSize from '@vx/responsive/lib/components/ParentSize'
+
 import { AreaClosed } from '@vx/shape'
 import { scaleLinear, scaleTime } from '@vx/scale'
 import { LinearGradient } from '@vx/gradient'
@@ -13,7 +21,7 @@ import { Group } from '@vx/group'
 import { Text } from '@vx/text'
 
 import { Section, Container, Range } from '../../style'
-import { minmax, yearsToZero, positionY } from './lib'
+import { yearsToZero } from './lib'
 
 const margin = { top: 20, bottom: 40, left: 60, right: 20 }
 const x = d => d.date
@@ -22,32 +30,43 @@ const y = d => d.co2e
 // Compose together the scale and accessor functions to get point functions
 const compose = (scale, accessor) => data => scale(accessor(data))
 
-const height = 500
-const width = 500
+const Graph = ({
+  co2e,
+  changePerYear,
+  endDate,
+  countryData,
+  worldData,
+  width,
+  height,
+}) => {
+  // Then we'll create some bounds
+  const xMax = width - margin.left - margin.right
+  const yMax = height - margin.top - margin.bottom
 
-// Then we'll create some bounds
-const xMax = width - margin.left - margin.right
-const yMax = height - margin.top - margin.bottom
+  const xScale = scaleTime({
+    rangeRound: [0, xMax],
+    domain: [Date.now(), new Date('2050-01-01')],
+    nice: true,
+  })
 
-const xScale = scaleTime({
-  rangeRound: [0, xMax],
-  domain: [Date.now(), new Date('2050-01-01')],
-  nice: true,
-})
+  const yScale = scaleLinear({
+    rangeRound: [yMax, 0],
+    domain: [0, 20],
+    nice: true,
+  })
 
-const yScale = scaleLinear({
-  rangeRound: [yMax, 0],
-  domain: [0, 20],
-  nice: true,
-})
+  const xPoint = compose(xScale, x)
+  const yPoint = compose(yScale, y)
 
-const xPoint = compose(xScale, x)
-const yPoint = compose(yScale, y)
-
-const Graph = ({ co2e, endDate, countryData, worldData }) => {
   const data = [
     { co2e, date: Date.now() },
     { co2e: 0, date: endDate },
+  ]
+
+  const dataFirstYear = [
+    { co2e, date: Date.now() },
+    { co2e: co2e - changePerYear, date: addYears(1, Date.now()) },
+    { co2e: 0, date: addYears(1, Date.now()) },
   ]
   const { Entity: name, Code: code, tCO2, Flags: flag } = countryData
   const { tCO2: tCO2World, Flags: flagWorld } = worldData
@@ -65,6 +84,64 @@ const Graph = ({ co2e, endDate, countryData, worldData }) => {
           stroke="#999"
           strokeWidth={1}
         />
+        <AreaClosed
+          data={dataFirstYear}
+          x={xPoint}
+          y={yPoint}
+          yScale={yScale}
+          fill="url(#gradient)"
+          stroke="#333"
+          strokeWidth={2}
+        />
+        <Annotation
+          x={xPoint(dataFirstYear[0])}
+          y={yPoint({ co2e: dataFirstYear[0].co2e / 2 })}
+          dx={200}
+          dy={-110}
+          width={xPoint({ date: addDays(20, dataFirstYear[0].date) })}
+          height={18}
+          color="#333"
+          title={`${co2e - changePerYear / 2}`}
+          label="Your co2e budget for the first year"
+          events={{
+            onClick: (props, state, event) => {
+              console.log(props, state, event)
+            },
+          }}
+        >
+          {/* <SubjectRect /> */}
+          <ConnectorElbow>
+            <ConnectorEndDot />
+          </ConnectorElbow>
+          <Note align="middle" lineType="horizontal" padding={10} />
+        </Annotation>
+        <Annotation
+          x={xPoint({
+            date: addDays(
+              differenceInDays(Date.now(), endDate) / 3,
+              Date.now()
+            ),
+          })}
+          y={yPoint({ co2e: dataFirstYear[0].co2e / 3 })}
+          dx={100}
+          dy={-60}
+          width={xPoint({ date: addDays(20, dataFirstYear[0].date) })}
+          height={18}
+          color="#333"
+          title="52.2"
+          label="Your life-time co2e budget"
+          events={{
+            onClick: (props, state, event) => {
+              console.log(props, state, event)
+            },
+          }}
+        >
+          {/* <SubjectRect /> */}
+          <ConnectorElbow>
+            <ConnectorEndDot />
+          </ConnectorElbow>
+          <Note align="middle" lineType="horizontal" padding={10} />
+        </Annotation>
         <AxisLeft
           scale={yScale}
           top={0}
@@ -113,8 +190,10 @@ const Graph = ({ co2e, endDate, countryData, worldData }) => {
 }
 
 const Plan = ({ co2e, setCo2e, countryData, worldData }) => {
-  // const [refPlan, planVisible] = useScrollPercentage()
+  const [refPlan, planVisible] = useScrollPercentage()
   const endDate = addDays(yearsToZero(co2e) * 365, new Date())
+  const changePerYear = co2e / yearsToZero(co2e)
+  const co2eFirstYear = co2e - changePerYear / 2
   const formattedEndDate = format('dd.MM.yyyy', endDate)
 
   return (
@@ -124,16 +203,25 @@ const Plan = ({ co2e, setCo2e, countryData, worldData }) => {
           <h2>Your co2e spending plan</h2>
           <p>How do you want to spend your co2e budget?</p>
           <div
+            ref={refPlan}
             css={css`
               height: 500px;
             `}
           >
-            <Graph
-              co2e={co2e}
-              endDate={endDate}
-              countryData={countryData}
-              worldData={worldData}
-            />
+            <ParentSize>
+              {({ width, height }) => (
+                <Graph
+                  co2e={co2e}
+                  changePerYear={changePerYear}
+                  endDate={endDate}
+                  countryData={countryData}
+                  worldData={worldData}
+                  width={width}
+                  height={height}
+                />
+              )}
+            </ParentSize>
+            ,
           </div>
           <p>
             {formattedEndDate} You need to reach 0 co2e at in{' '}
@@ -143,13 +231,13 @@ const Plan = ({ co2e, setCo2e, countryData, worldData }) => {
       </Section>
       <Section
         css={css`
-          /* ${planVisible < 0.3 ?? 'display: none;'} */
+          ${planVisible < 0.3 ?? 'display: none;'}
           position: fixed;
           bottom: 0;
           width: 100%;
           padding: 0 0 2em;
           background: #eee;
-          /* opacity: ${planVisible > 0.4 ? 1 : 0}; */
+          opacity: ${planVisible > 0.4 ? 1 : 0};
           transition: opacity 200ms;
 
           z-index: 99;
@@ -165,7 +253,7 @@ const Plan = ({ co2e, setCo2e, countryData, worldData }) => {
           >
             <p>Amount of co2e this year</p>
             <p>
-              <b>{co2e}t</b>
+              <b>{co2eFirstYear}t</b>
             </p>
             <Range
               css={css`

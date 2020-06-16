@@ -4,6 +4,7 @@ import { Link } from 'gatsby'
 import Layout from '../components/Layout'
 import SEO from '../components/SEO'
 import { Section, Container } from '../style'
+import Budget from '../scenes/budget'
 
 const IndexPage = () => {
   return (
@@ -12,8 +13,9 @@ const IndexPage = () => {
 
       <Section>
         <Container>
-          <h2>Track your co2</h2>
-          <Link to="/activities">Start</Link>
+          <h2>co2 Budget</h2>
+          <Link to="/activities">Activities</Link>
+          <Budget />
         </Container>
       </Section>
     </Layout>
