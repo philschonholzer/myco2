@@ -227,6 +227,10 @@ const Plan = ({ co2e, setCo2e, countryData, worldData }) => {
             {formattedEndDate} You need to reach 0 co2e at in{' '}
             {yearsToZero(co2e).toFixed(2)} years
           </p>
+          <p>
+            Data:
+            https://ourworldindata.org/grapher/consumption-co2-per-capita?year=latest
+          </p>
         </Container>
       </Section>
       <Section

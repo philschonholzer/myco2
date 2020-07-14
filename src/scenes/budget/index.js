@@ -13,6 +13,7 @@ import BarGraph from './BarGraph'
 
 const Section = styled(DefaultSection)``
 
+// https://ourworldindata.org/grapher/consumption-co2-per-capita?year=latest
 const query = graphql`
   {
     allCo2ConsumptionCsv {
