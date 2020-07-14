@@ -83,7 +83,14 @@ const Budget = () => {
         />
       )}
       <hr />
-      <FirstBudget co2e={co2e} />
+      {currentCountry && (
+        <FirstBudget
+          co2e={co2e}
+          setCo2e={setCo2e}
+          countryData={currentCountry}
+          worldData={world}
+        />
+      )}
       <hr />
       <DailyBudget co2e={co2e} />
     </>

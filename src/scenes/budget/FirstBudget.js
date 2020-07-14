@@ -1,65 +1,309 @@
 import React from 'react'
 import { css } from '@emotion/core'
 
-import { Section, Container } from '../../style'
-import { yearsToZero, minmax } from './lib'
+import { addDays, format, differenceInDays, addYears } from 'date-fns/fp'
+import { useScrollPercentage } from 'react-scroll-percentage'
 
-const FirstBudget = ({ co2e }) => {
+import {
+  Annotation,
+  ConnectorElbow,
+  ConnectorEndDot,
+  Note,
+} from 'react-annotation'
+
+import { AxisLeft, AxisBottom } from '@vx/axis'
+import ParentSize from '@vx/responsive/lib/components/ParentSize'
+
+import { AreaClosed, LinePath, Line } from '@vx/shape'
+import { scaleLinear, scaleTime } from '@vx/scale'
+import { LinearGradient } from '@vx/gradient'
+import { Group } from '@vx/group'
+import { Text } from '@vx/text'
+
+import { Section, Container, Range } from '../../style'
+import { yearsToZero } from './lib'
+
+const margin = { top: 20, bottom: 40, left: 60, right: 20 }
+const x = d => d.col
+const y = d => d.co2e
+
+// Compose together the scale and accessor functions to get point functions
+const compose = (scale, accessor) => data => scale(accessor(data))
+
+const Graph = ({
+  co2e,
+  changePerYear,
+  endDate,
+  countryData,
+  worldData,
+  width,
+  height,
+}) => {
+  console.log('width', width)
+  // Then we'll create some bounds
+  const xMax = width - margin.left - margin.right
+  const yMax = height - margin.top - margin.bottom
+
+  const xScale = scaleTime({
+    rangeRound: [0, xMax],
+    domain: [1, 6],
+    nice: true,
+  })
+
+  const yScale = scaleLinear({
+    rangeRound: [yMax, 0],
+    domain: [0, 20],
+    nice: true,
+  })
+
+  const xPoint = compose(xScale, x)
+  const yPoint = compose(yScale, y)
+
+  const dataFirstYear = [
+    { co2e, col: 2 },
+    { co2e: co2e - changePerYear, col: 3 },
+    { co2e: 0, col: 3 },
+  ]
+
+  const dataFirstYearAvg = [
+    { co2e: co2e - changePerYear / 2, col: 4 },
+    { co2e: co2e - changePerYear / 2, col: 5 },
+    { co2e: 0, col: 5 },
+  ]
+  const arrowStem = [
+    { co2e: co2e / 2, col: 3.1 },
+    { co2e: co2e / 2, col: 3.8 },
+  ]
+  const arrowPoint = [
+    { co2e: co2e / 2 + 0.6, col: 3.8 - 100 / width },
+    { co2e: co2e / 2, col: 3.8 },
+    { co2e: co2e / 2 - 0.6, col: 3.8 - 100 / width },
+  ]
+  const { Entity: name, Code: code, tCO2, Flags: flag } = countryData
+  const { tCO2: tCO2World, Flags: flagWorld } = worldData
+
   return (
-    <Section>
-      <Container>
-        <h2>Your personal co2e budget this year</h2>
-        <p>
-          You have a {co2e}t co2e budget this year to spend. Each year you need
-          to reduce your co2e by {(co2e / yearsToZero(co2e)).toFixed(2)}
-          t.
-        </p>
-        <div
-          css={css`
-            position: relative;
-            height: 50vw;
-          `}
+    <svg width={width} height={height}>
+      <LinearGradient from="#fbc2eb" to="#a6c1ee" id="gradient" />
+      <Group top={margin.top} left={margin.left}>
+        <AreaClosed
+          data={dataFirstYear}
+          x={xPoint}
+          y={yPoint}
+          yScale={yScale}
+          fill="url(#gradient)"
+          stroke="#333"
+          strokeWidth={1}
+        />
+        <LinePath
+          data={arrowStem}
+          y={yPoint}
+          x={xPoint}
+          stroke="red"
+          strokeWidth={5}
+        />
+        <LinePath
+          data={arrowPoint}
+          y={yPoint}
+          x={xPoint}
+          stroke="red"
+          strokeWidth={5}
+        />
+        <AreaClosed
+          data={dataFirstYearAvg}
+          x={xPoint}
+          y={yPoint}
+          yScale={yScale}
+          fill="url(#gradient)"
+          stroke="#333"
+          strokeWidth={2}
+        />
+        <Annotation
+          x={xPoint(dataFirstYear[0])}
+          y={yPoint({ co2e: dataFirstYear[0].co2e / 2 })}
+          dx={200}
+          dy={-110}
+          width={xPoint({ date: addDays(20, dataFirstYear[0].date) })}
+          height={18}
+          color="#333"
+          title={`${co2e - changePerYear / 2}`}
+          label="Your co2e budget for the first year"
+          events={{
+            onClick: (props, state, event) => {
+              console.log(props, state, event)
+            },
+          }}
         >
-          <svg
+          {/* <SubjectRect /> */}
+          <ConnectorElbow>
+            <ConnectorEndDot />
+          </ConnectorElbow>
+          <Note align="middle" lineType="horizontal" padding={10} />
+        </Annotation>
+        <Annotation
+          x={xPoint({
+            date: addDays(
+              differenceInDays(Date.now(), endDate) / 3,
+              Date.now()
+            ),
+          })}
+          y={yPoint({ co2e: dataFirstYear[0].co2e / 3 })}
+          dx={100}
+          dy={-60}
+          width={xPoint({ date: addDays(20, dataFirstYear[0].date) })}
+          height={18}
+          color="#333"
+          title="52.2"
+          label="Your life-time co2e budget"
+          events={{
+            onClick: (props, state, event) => {
+              console.log(props, state, event)
+            },
+          }}
+        >
+          {/* <SubjectRect /> */}
+          <ConnectorElbow>
+            <ConnectorEndDot />
+          </ConnectorElbow>
+          <Note align="middle" lineType="horizontal" padding={10} />
+        </Annotation>
+        <AxisLeft
+          scale={yScale}
+          top={0}
+          left={0}
+          label="Greenhouse gas (tCO2e)"
+          stroke="#1b1a1e"
+          tickTextFill="#1b1a1e"
+        />
+        <Line
+          from={{ x: 0, y: yMax }}
+          to={{ x: xMax, y: yMax }}
+          stroke="black"
+        />
+      </Group>
+      <path
+        d={`M60,${yPoint({ co2e: tCO2 })} L${xMax},${yPoint({ co2e: tCO2 })}`}
+        stroke="#aaa"
+      />
+      <Text
+        x={(xMax - margin.left) / 2}
+        y={yPoint({ co2e: tCO2 }) + 12}
+        fontSize="30"
+        textAnchor="middle"
+      >
+        {flag}
+      </Text>
+      <path
+        d={`M60,${yPoint({ co2e: tCO2World })} L${xMax},${yPoint({
+          co2e: tCO2World,
+        })}`}
+        stroke="#aaa"
+      />
+      <Text
+        x={(xMax - margin.left) / 2}
+        y={yPoint({ co2e: tCO2World }) + 12}
+        fontSize="30"
+        textAnchor="middle"
+      >
+        {flagWorld}
+      </Text>
+    </svg>
+  )
+}
+
+const FirstBudget = ({ co2e, setCo2e, countryData, worldData }) => {
+  const [refPlan, planVisible] = useScrollPercentage()
+  const endDate = addDays(yearsToZero(co2e) * 365, new Date())
+  const changePerYear = co2e / yearsToZero(co2e)
+  const co2eFirstYear = co2e - changePerYear / 2
+  const formattedEndDate = format('dd.MM.yyyy', endDate)
+
+  return (
+    <>
+      <Section>
+        <Container>
+          <h2>Your personal co2e budget this year</h2>
+          <p>
+            You have a {co2e}t co2e budget this year to spend. Each year you
+            need to reduce your co2e by {(co2e / yearsToZero(co2e)).toFixed(2)}
+            t.
+          </p>
+          <div
+            ref={refPlan}
             css={css`
-              position: absolute;
-              bottom: 0;
+              height: 500px;
             `}
-            viewBox={`-10 ${minmax(-500, 10, 50 - co2e * 5)} 120 ${minmax(
-              60,
-              200,
-              co2e * 5 + 20
-            )}`}
           >
-            <text
-              x="-30"
-              y="-3"
-              transform="rotate(-90)"
-              style={{ fontSize: 7 }}
-            >
-              co2e
-            </text>
-            <text x="50" y="67" style={{ fontSize: 7 }}>
-              years
-            </text>
-            <path d="M0,-500 L0,65 M-5,60 L120,60" stroke="#555" />
-            <path
-              d={`M0,${60 - co2e * 5} L5,${60 - co2e * 5} L5,60 L0,60 Z`}
-              stroke="#6af"
-              fill="#6af3"
+            <ParentSize>
+              {({ width, height }) => (
+                <Graph
+                  co2e={co2e}
+                  changePerYear={changePerYear}
+                  endDate={endDate}
+                  countryData={countryData}
+                  worldData={worldData}
+                  width={width}
+                  height={height}
+                />
+              )}
+            </ParentSize>
+            ,
+          </div>
+          <p>
+            {formattedEndDate} You need to reach 0 co2e at in{' '}
+            {yearsToZero(co2e).toFixed(2)} years
+          </p>
+          <p>
+            Data:
+            https://ourworldindata.org/grapher/consumption-co2-per-capita?year=latest
+          </p>
+        </Container>
+      </Section>
+      <Section
+        css={css`
+          ${planVisible < 0.3 ?? 'display: none;'}
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          width: 100%;
+          padding: 0 0 2em;
+          background: #eee;
+          opacity: ${planVisible > 0.4 ? 1 : 0};
+          transition: opacity 200ms;
+
+          z-index: 99;
+        `}
+      >
+        <Container>
+          <label
+            htmlFor="yearOneCo2"
+            css={css`
+              display: grid;
+              grid: 'lable amount' 'range range' / 1fr auto;
+            `}
+          >
+            <p>Amount of co2e this year</p>
+            <p>
+              <b>{co2eFirstYear}t</b>
+            </p>
+            <Range
+              css={css`
+                grid-area: range;
+              `}
+              type="range"
+              min="2"
+              max="20"
+              step="0.2"
+              name="yearOneAmount"
+              id="yearOneCo2"
+              value={co2e}
+              onChange={e => setCo2e(e.target.value)}
             />
-            <text y="40" style={{ fontSize: 7, fill: '#6af' }}>
-              <tspan x="10" dy="1.2em">
-                {co2e}t
-              </tspan>
-              <tspan x="10" dy="1.3em" style={{ fontSize: 4.5 }}>
-                co2e
-              </tspan>
-            </text>
-          </svg>
-        </div>
-      </Container>
-    </Section>
+          </label>
+        </Container>
+      </Section>
+    </>
   )
 }
 
