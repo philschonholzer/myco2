@@ -234,6 +234,8 @@ const Plan = ({ co2e, setCo2e, countryData, worldData }) => {
           ${planVisible < 0.3 ?? 'display: none;'}
           position: fixed;
           bottom: 0;
+          left: 0;
+          right: 0;
           width: 100%;
           padding: 0 0 2em;
           background: #eee;
@@ -260,8 +262,8 @@ const Plan = ({ co2e, setCo2e, countryData, worldData }) => {
                 grid-area: range;
               `}
               type="range"
-              min="1"
-              max="30"
+              min="2"
+              max="20"
               step="0.2"
               name="yearOneAmount"
               id="yearOneCo2"

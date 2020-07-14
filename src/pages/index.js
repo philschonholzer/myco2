@@ -15,9 +15,9 @@ const IndexPage = () => {
         <Container>
           <h2>co2 Budget</h2>
           <Link to="/activities">Activities</Link>
-          <Budget />
         </Container>
       </Section>
+      <Budget />
     </Layout>
   )
 }
