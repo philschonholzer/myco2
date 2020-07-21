@@ -59,25 +59,22 @@ const Graph = ({
   const xPoint = compose(xScale, x)
   const yPoint = compose(yScale, y)
 
-  const dataFirstYear = [
-    { co2e, col: 2 },
-    { co2e: co2e - changePerYear, col: 3 },
+  const dataFirstYearAvg = [
+    { co2e: co2e - changePerYear / 2, col: 2 },
+    { co2e: co2e - changePerYear / 2, col: 3 },
     { co2e: 0, col: 3 },
   ]
 
-  const dataFirstYearAvg = [
-    { co2e: co2e - changePerYear / 2, col: 4 },
-    { co2e: co2e - changePerYear / 2, col: 5 },
+  const dataSecondYearAvg = [
+    { co2e: co2e - changePerYear * 1.5, col: 3 },
+    { co2e: co2e - changePerYear * 1.5, col: 4 },
+    { co2e: 0, col: 4 },
+  ]
+
+  const dataThirdYearAvg = [
+    { co2e: co2e - changePerYear * 2.5, col: 4 },
+    { co2e: co2e - changePerYear * 2.5, col: 5 },
     { co2e: 0, col: 5 },
-  ]
-  const arrowStem = [
-    { co2e: co2e / 2, col: 3.1 },
-    { co2e: co2e / 2, col: 3.8 },
-  ]
-  const arrowPoint = [
-    { co2e: co2e / 2 + 0.6, col: 3.8 - 100 / width },
-    { co2e: co2e / 2, col: 3.8 },
-    { co2e: co2e / 2 - 0.6, col: 3.8 - 100 / width },
   ]
   const { Entity: name, Code: code, tCO2, Flags: flag } = countryData
   const { tCO2: tCO2World, Flags: flagWorld } = worldData
@@ -87,29 +84,6 @@ const Graph = ({
       <LinearGradient from="#fbc2eb" to="#a6c1ee" id="gradient" />
       <Group top={margin.top} left={margin.left}>
         <AreaClosed
-          data={dataFirstYear}
-          x={xPoint}
-          y={yPoint}
-          yScale={yScale}
-          fill="url(#gradient)"
-          stroke="#333"
-          strokeWidth={1}
-        />
-        <LinePath
-          data={arrowStem}
-          y={yPoint}
-          x={xPoint}
-          stroke="red"
-          strokeWidth={5}
-        />
-        <LinePath
-          data={arrowPoint}
-          y={yPoint}
-          x={xPoint}
-          stroke="red"
-          strokeWidth={5}
-        />
-        <AreaClosed
           data={dataFirstYearAvg}
           x={xPoint}
           y={yPoint}
@@ -118,55 +92,87 @@ const Graph = ({
           stroke="#333"
           strokeWidth={2}
         />
-        <Annotation
-          x={xPoint(dataFirstYear[0])}
-          y={yPoint({ co2e: dataFirstYear[0].co2e / 2 })}
-          dx={200}
-          dy={-110}
-          width={xPoint({ date: addDays(20, dataFirstYear[0].date) })}
-          height={18}
-          color="#333"
-          title={`${co2e - changePerYear / 2}`}
-          label="Your co2e budget for the first year"
-          events={{
-            onClick: (props, state, event) => {
-              console.log(props, state, event)
-            },
-          }}
+        <AreaClosed
+          data={dataSecondYearAvg}
+          x={xPoint}
+          y={yPoint}
+          yScale={yScale}
+          fill="url(#gradient)"
+          stroke="#333"
+          strokeWidth={2}
+          opacity="0.3"
+        />
+        <AreaClosed
+          data={dataThirdYearAvg}
+          x={xPoint}
+          y={yPoint}
+          yScale={yScale}
+          fill="url(#gradient)"
+          stroke="#333"
+          strokeWidth={2}
+          opacity="0.1"
+        />
+        <Text
+          x={xPoint({ col: 2.5 })}
+          y={yPoint({ co2e: co2e - changePerYear / 2 + 0.5 })}
+          fontSize="16"
+          textAnchor="middle"
+          scaleToFit={width < 400}
+          width={(width || 1000) / 9}
         >
-          {/* <SubjectRect /> */}
-          <ConnectorElbow>
-            <ConnectorEndDot />
-          </ConnectorElbow>
-          <Note align="middle" lineType="horizontal" padding={10} />
-        </Annotation>
-        <Annotation
-          x={xPoint({
-            date: addDays(
-              differenceInDays(Date.now(), endDate) / 3,
-              Date.now()
-            ),
-          })}
-          y={yPoint({ co2e: dataFirstYear[0].co2e / 3 })}
-          dx={100}
-          dy={-60}
-          width={xPoint({ date: addDays(20, dataFirstYear[0].date) })}
-          height={18}
-          color="#333"
-          title="52.2"
-          label="Your life-time co2e budget"
-          events={{
-            onClick: (props, state, event) => {
-              console.log(props, state, event)
-            },
-          }}
+          {co2e - changePerYear / 2} tco2e
+        </Text>
+        <Text
+          x={xPoint({ col: 2.5 })}
+          y={yPoint({ co2e: 0.5 })}
+          fontSize="16"
+          textAnchor="middle"
+          scaleToFit={width < 400}
+          width={(width || 1000) / 9}
         >
-          {/* <SubjectRect /> */}
-          <ConnectorElbow>
-            <ConnectorEndDot />
-          </ConnectorElbow>
-          <Note align="middle" lineType="horizontal" padding={10} />
-        </Annotation>
+          First Year
+        </Text>
+        <Text
+          x={xPoint({ col: 3.5 })}
+          y={yPoint({ co2e: co2e - changePerYear * 1.5 + 0.5 })}
+          fontSize="16"
+          textAnchor="middle"
+          scaleToFit={width < 400}
+          width={(width || 1000) / 9}
+        >
+          {co2e - changePerYear * 1.5} tco2e
+        </Text>
+        <Text
+          x={xPoint({ col: 3.5 })}
+          y={yPoint({ co2e: 0.5 })}
+          fontSize="16"
+          textAnchor="middle"
+          scaleToFit={width < 400}
+          width={(width || 1000) / 9}
+        >
+          Second Year
+        </Text>
+        <Text
+          x={xPoint({ col: 4.5 })}
+          y={yPoint({ co2e: co2e - changePerYear * 2.5 + 0.5 })}
+          fontSize="16"
+          textAnchor="middle"
+          scaleToFit={width < 400}
+          width={(width || 1000) / 9}
+        >
+          {co2e - changePerYear * 2.5} tco2e
+        </Text>
+        <Text
+          x={xPoint({ col: 4.5 })}
+          y={yPoint({ co2e: 0.5 })}
+          fontSize="16"
+          textAnchor="middle"
+          scaleToFit={width < 400}
+          width={(width || 1000) / 9}
+        >
+          Thrid Year
+        </Text>
+
         <AxisLeft
           scale={yScale}
           top={0}
