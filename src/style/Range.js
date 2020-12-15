@@ -36,9 +36,13 @@ const Range = styled.input`
     width: var(--width);
     border-radius: 50%;
     background: #fff;
-    cursor: pointer;
+    cursor: grab;
     -webkit-appearance: none;
     margin-top: calc(var(--track-to-thumb) * -1);
+
+    &:active {
+      cursor: grabbing;
+    }
   }
   &::-moz-range-track {
     width: 100%;

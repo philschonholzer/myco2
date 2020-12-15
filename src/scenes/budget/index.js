@@ -7,6 +7,7 @@ import { Section as DefaultSection, Container } from '../../style'
 import Co2Left from './Co2Left'
 import PersonalBudget from './PersonalBudget'
 import Plan from './Plan'
+import YearsLeft from './YearsLeft'
 import FirstBudget from './FirstBudget'
 import DailyBudget from './DailyBudget'
 import BarGraph from './BarGraph'
@@ -73,23 +74,25 @@ const Budget = () => {
       <Co2Left />
       <hr />
       <PersonalBudget />
-      <hr />
       {currentCountry && (
-        <Plan
-          co2e={co2e}
-          setCo2e={setCo2e}
-          countryData={currentCountry}
-          worldData={world}
-        />
-      )}
-      <hr />
-      {currentCountry && (
-        <FirstBudget
-          co2e={co2e}
-          setCo2e={setCo2e}
-          countryData={currentCountry}
-          worldData={world}
-        />
+        <>
+          <hr />
+          <YearsLeft countryData={currentCountry} worldData={world} />
+          <hr />
+          <Plan
+            co2e={co2e}
+            setCo2e={setCo2e}
+            countryData={currentCountry}
+            worldData={world}
+          />
+          <hr />
+          <FirstBudget
+            co2e={co2e}
+            setCo2e={setCo2e}
+            countryData={currentCountry}
+            worldData={world}
+          />
+        </>
       )}
       <hr />
       <DailyBudget co2e={co2e} />

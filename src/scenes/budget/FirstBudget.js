@@ -14,11 +14,12 @@ import {
 import { AxisLeft, AxisBottom } from '@vx/axis'
 import ParentSize from '@vx/responsive/lib/components/ParentSize'
 
-import { AreaClosed, LinePath, Line } from '@vx/shape'
+import { AreaClosed, Line } from '@vx/shape'
 import { scaleLinear, scaleTime } from '@vx/scale'
 import { LinearGradient } from '@vx/gradient'
 import { Group } from '@vx/group'
 import { Text } from '@vx/text'
+import { Marker } from '@vx/marker'
 
 import { Section, Container, Range } from '../../style'
 import { yearsToZero } from './lib'
@@ -186,33 +187,29 @@ const Graph = ({
           to={{ x: xMax, y: yMax }}
           stroke="black"
         />
+        <Marker
+          from={{ x: 0, y: yPoint({ co2e: tCO2 }) }}
+          to={{ x: xMax, y: yPoint({ co2e: tCO2 }) }}
+          stroke="#aaa"
+          strokeWidth={1}
+          label={flag}
+          labelStroke="red"
+          labelDx={xMax / 2}
+          labelDy={15}
+          labelFontSize="40"
+        />
+        <Marker
+          from={{ x: 0, y: yPoint({ co2e: tCO2World }) }}
+          to={{ x: xMax, y: yPoint({ co2e: tCO2World }) }}
+          stroke="#aaa"
+          strokeWidth={1}
+          label={flagWorld}
+          labelStroke="red"
+          labelDx={xMax / 2}
+          labelDy={15}
+          labelFontSize="40"
+        />
       </Group>
-      <path
-        d={`M60,${yPoint({ co2e: tCO2 })} L${xMax},${yPoint({ co2e: tCO2 })}`}
-        stroke="#aaa"
-      />
-      <Text
-        x={(xMax - margin.left) / 2}
-        y={yPoint({ co2e: tCO2 }) + 12}
-        fontSize="30"
-        textAnchor="middle"
-      >
-        {flag}
-      </Text>
-      <path
-        d={`M60,${yPoint({ co2e: tCO2World })} L${xMax},${yPoint({
-          co2e: tCO2World,
-        })}`}
-        stroke="#aaa"
-      />
-      <Text
-        x={(xMax - margin.left) / 2}
-        y={yPoint({ co2e: tCO2World }) + 12}
-        fontSize="30"
-        textAnchor="middle"
-      >
-        {flagWorld}
-      </Text>
     </svg>
   )
 }

@@ -13,12 +13,12 @@ import {
 
 import { AxisLeft, AxisBottom } from '@vx/axis'
 import ParentSize from '@vx/responsive/lib/components/ParentSize'
-
+import { curveBasis } from '@vx/curve'
 import { AreaClosed } from '@vx/shape'
 import { scaleLinear, scaleTime } from '@vx/scale'
 import { LinearGradient } from '@vx/gradient'
 import { Group } from '@vx/group'
-import { Text } from '@vx/text'
+import { Marker } from '@vx/marker'
 
 import { Section, Container, Range } from '../../style'
 import { yearsToZero } from './lib'
@@ -43,6 +43,9 @@ const Graph = ({
   const xMax = width - margin.left - margin.right
   const yMax = height - margin.top - margin.bottom
 
+  const { Entity: name, Code: code, tCO2, Flags: flag } = countryData
+  const { tCO2: tCO2World, Flags: flagWorld } = worldData
+
   const xScale = scaleTime({
     rangeRound: [0, xMax],
     domain: [Date.now(), new Date('2050-01-01')],
@@ -59,7 +62,11 @@ const Graph = ({
   const yPoint = compose(yScale, y)
 
   const data = [
-    { co2e, date: Date.now() },
+    { co2e: tCO2, date: Date.now() },
+    {
+      co2e: co2e / 2,
+      date: addDays(300, Date.now()),
+    },
     { co2e: 0, date: endDate },
   ]
 
@@ -68,8 +75,6 @@ const Graph = ({
     { co2e: co2e - changePerYear, date: addYears(1, Date.now()) },
     { co2e: 0, date: addYears(1, Date.now()) },
   ]
-  const { Entity: name, Code: code, tCO2, Flags: flag } = countryData
-  const { tCO2: tCO2World, Flags: flagWorld } = worldData
 
   return (
     <svg width={width} height={height}>
@@ -83,8 +88,19 @@ const Graph = ({
           fill="url(#gradient)"
           stroke="#999"
           strokeWidth={1}
+          curve={curveBasis}
         />
-        <AreaClosed
+        {data.map((d, j) => (
+          <circle
+            key={j}
+            r={3}
+            cx={xPoint(d)}
+            cy={yPoint(d)}
+            stroke="rgba(33,33,33,0.5)"
+            fill="transparent"
+          />
+        ))}
+        {/* <AreaClosed
           data={dataFirstYear}
           x={xPoint}
           y={yPoint}
@@ -92,8 +108,8 @@ const Graph = ({
           fill="url(#gradient)"
           stroke="#333"
           strokeWidth={2}
-        />
-        <Annotation
+        /> */}
+        {/* <Annotation
           x={xPoint(dataFirstYear[0])}
           y={yPoint({ co2e: dataFirstYear[0].co2e / 2 })}
           dx={200}
@@ -109,12 +125,11 @@ const Graph = ({
             },
           }}
         >
-          {/* <SubjectRect /> */}
           <ConnectorElbow>
             <ConnectorEndDot />
           </ConnectorElbow>
           <Note align="middle" lineType="horizontal" padding={10} />
-        </Annotation>
+        </Annotation> */}
         <Annotation
           x={xPoint({
             date: addDays(
@@ -158,33 +173,29 @@ const Graph = ({
           stroke="#1b1a1e"
           tickTextFill="#1b1a1e"
         />
+        <Marker
+          from={{ x: 0, y: yPoint({ co2e: tCO2 }) }}
+          to={{ x: xMax, y: yPoint({ co2e: tCO2 }) }}
+          stroke="#aaa"
+          strokeWidth={1}
+          label={flag}
+          labelStroke="red"
+          labelDx={xMax / 2}
+          labelDy={15}
+          labelFontSize="40"
+        />
+        <Marker
+          from={{ x: 0, y: yPoint({ co2e: tCO2World }) }}
+          to={{ x: xMax, y: yPoint({ co2e: tCO2World }) }}
+          stroke="#aaa"
+          strokeWidth={1}
+          label={flagWorld}
+          labelStroke="red"
+          labelDx={xMax / 2}
+          labelDy={15}
+          labelFontSize="40"
+        />
       </Group>
-      <path
-        d={`M60,${yPoint({ co2e: tCO2 })} L${xMax},${yPoint({ co2e: tCO2 })}`}
-        stroke="#aaa"
-      />
-      <Text
-        x={(xMax - margin.left) / 2}
-        y={yPoint({ co2e: tCO2 }) + 12}
-        fontSize="30"
-        textAnchor="middle"
-      >
-        {flag}
-      </Text>
-      <path
-        d={`M60,${yPoint({ co2e: tCO2World })} L${xMax},${yPoint({
-          co2e: tCO2World,
-        })}`}
-        stroke="#aaa"
-      />
-      <Text
-        x={(xMax - margin.left) / 2}
-        y={yPoint({ co2e: tCO2World }) + 12}
-        fontSize="30"
-        textAnchor="middle"
-      >
-        {flagWorld}
-      </Text>
     </svg>
   )
 }
